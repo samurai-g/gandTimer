@@ -1,7 +1,6 @@
 <script>
 	
 	import Nested from './Nested.svelte';
-
 	import Timer from './Timer.svelte';
 
 	let minutes;
@@ -49,7 +48,6 @@
 </script>
 
 <main style="background-color: {backgroundColor}">
-
 	<h1>Gandalan<br>timer</h1>
 	
 	<h2>Whats your focus today?</h2>
