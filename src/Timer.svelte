@@ -12,6 +12,7 @@ $: seconds = Math.floor($timer - minutes * 60);
 
 export let minutes;
 export let seconds;
+export let timername;
 
 const buttonStartTimer = () => 
 {

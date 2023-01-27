@@ -2,13 +2,15 @@
 	
 	import Nested from './Nested.svelte';
 	import Timer from './Timer.svelte';
+	import {ToDoStore} from './stores';
+	import {TimerMinutesStore} from './stores';
 
 	let minutes;
 	let seconds;
 
+	let newTodo;
 
-
-	let backgroundColor = 'white';
+	let backgroundColor = 'white';	
 	let oppositeTheme = 'dark';
 
 	//To-Do List
@@ -36,14 +38,20 @@
 			id: '2',
 			name: 'Moriz'
 		},
-	]
-
-	let todos = [
-		{
+	]	
+	$ToDoStore = [...$ToDoStore, {
 			statusDone: false,
 			text: 'Finish gandalan timer'
-		},
-	]
+		}];	
+
+	function AddNewTodo(){
+		let todoObject = {
+		statusDone: false,
+		text: newTodo
+	};
+		$ToDoStore = [...$ToDoStore, todoObject];	
+	newTodo = null;
+	}
 
 </script>
 
@@ -51,18 +59,21 @@
 	<h1>Gandalan<br>timer</h1>
 	
 	<h2>Whats your focus today?</h2>
-	<input bind:value={newTask}>
-	
-	<div class:done={todos.at(0).done}>
+	<input placeholder="..." bind:value={newTodo} on:keydown={(e) => {if(e.key == "Enter") AddNewTodo()}}>
+	<br/>	
+
+	{#each $ToDoStore as todoItem}
 		<input
 			type=checkbox
-			checked={todos.at(0).done}
+			bind:checked={todoItem.statusDone}
 		>
 		<input
 			placeholder="What needs to be done?"
-			value={todos.at(0).text}
+			bind:value={todoItem.text}
+			disabled={todoItem.statusDone} class:statusDone={todoItem.statusDone}
 		>
-	</div>
+	<br/>
+	{/each}
 
 	<div class="flex">
 		<h2>Current work period: <br><br> <span class="mins">{minutes}</span>min 
@@ -108,4 +119,8 @@
 			max-width: none;
 		}
 	}
-</style>
+	.statusDone{
+		opacity: 0.5;
+		color: rgba(54, 54, 58, 0.5);
+	}
+	</style>
