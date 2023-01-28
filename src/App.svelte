@@ -3,10 +3,8 @@
 	import Nested from './Nested.svelte';
 	import Timer from './Timer.svelte';
 	import {ToDoStore} from './stores';
-	import {TimerMinutesStore} from './stores';
-
-	let minutes;
-	let seconds;
+	import { writable } from 'svelte/store';
+	import {TimerStore} from './stores';
 
 	let newTodo;
 
@@ -38,11 +36,12 @@
 			id: '2',
 			name: 'Moriz'
 		},
-	]	
+	]
+
 	$ToDoStore = [...$ToDoStore, {
 			statusDone: false,
 			text: 'Finish gandalan timer'
-		}];	
+		}];
 
 	function AddNewTodo(){
 		let todoObject = {
@@ -51,16 +50,26 @@
 	};
 		$ToDoStore = [...$ToDoStore, todoObject];	
 	newTodo = null;
-	}
+	};
+
+	let newTimerValue;
+
+	$TimerStore = [...$TimerStore, {
+		value: 5,
+		timername: 'Relax'
+	}];
+
 
 </script>
 
 <main style="background-color: {backgroundColor}">
+
 	<h1>Gandalan<br>timer</h1>
 	
 	<h2>Whats your focus today?</h2>
 	<input placeholder="..." bind:value={newTodo} on:keydown={(e) => {if(e.key == "Enter") AddNewTodo()}}>
 	<br/>	
+
 
 	{#each $ToDoStore as todoItem}
 		<input
@@ -75,12 +84,11 @@
 	<br/>
 	{/each}
 
-	<div class="flex">
-		<h2>Current work period: <br><br> <span class="mins">{minutes}</span>min 
-		<span class="secs">{seconds}</span>s</h2>
-	</div>
+	{#each $TimerStore as timerItem}
+		<Timer original={timerItem.value} timername={timerItem.timername}></Timer>
+	{/each}
 
-	<Timer bind:minutes bind:seconds></Timer>
+
 
 	<div class="flex">
 		<button on:click={darkThemeToggle}>Change to {oppositeTheme} theme</button>

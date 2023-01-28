@@ -2,4 +2,4 @@ import { writable } from "svelte/store";
 
 
 export const ToDoStore = writable([]);
-export let TimerMinutesStore = writable([]);
+export const TimerStore = writable([{value: 25,timername: 'Work'}]);
